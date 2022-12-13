@@ -8,6 +8,7 @@ namespace Xadrez_Console
     {
         static void Main(string[] args)
         {
+
             try
             {
                 TabuleiroJogo tab = new TabuleiroJogo(8, 8);
