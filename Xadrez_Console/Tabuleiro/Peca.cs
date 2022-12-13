@@ -1,5 +1,4 @@
-﻿
-namespace Tabuleiro
+﻿namespace Tabuleiro
 {
     abstract class Peca
     {
