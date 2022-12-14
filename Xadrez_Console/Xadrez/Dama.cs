@@ -33,7 +33,7 @@ namespace Xadrez
                 {
                     break;
                 }
-                pos.Linha = pos.Linha - 1;
+                pos.DefinirValores(pos.Linha - 1, pos.Coluna);
             }
 
             //abaixo
@@ -45,7 +45,7 @@ namespace Xadrez
                 {
                     break;
                 }
-                pos.Linha = pos.Linha + 1;
+                pos.DefinirValores(pos.Linha + 1, pos.Coluna);
             }
 
             //direita
@@ -57,7 +57,7 @@ namespace Xadrez
                 {
                     break;
                 }
-                pos.Coluna = pos.Coluna + 1;
+                pos.DefinirValores(pos.Linha, pos.Coluna + 1);
             }
 
             //esquerda
@@ -69,7 +69,7 @@ namespace Xadrez
                 {
                     break;
                 }
-                pos.Coluna = pos.Coluna - 1;
+                pos.DefinirValores(pos.Linha, pos.Coluna - 1);
             }
 
             // NO
