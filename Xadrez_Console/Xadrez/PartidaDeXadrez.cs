@@ -14,6 +14,7 @@ namespace Xadrez
 
         private HashSet<Peca> Capturadas;
         public bool Xeque { get; private set; }
+        public Peca VulneravelEnPassant { get; private set; }
 
         public PartidaDeXadrez()
         {
@@ -25,6 +26,7 @@ namespace Xadrez
             ColocarPecas();
             Terminada = false;
             Xeque = false;
+            VulneravelEnPassant = null;
         }
 
         public Peca ExecutarMovimento(Posicao origem, Posicao destino)
@@ -56,6 +58,25 @@ namespace Xadrez
                 Peca T = Tab.RetirarPeca(origemT);
                 T.IncrementarQtdeMovimentos();
                 Tab.ColocarPeca(T, destinoT);
+            }
+
+            // #jogadaespecial en passant
+            if(p is Peao)
+            {
+                if(origem.Coluna != destino.Coluna && PecaCapturada == null)
+                {
+                    Posicao posP;
+                    if(p.Cor == ECor.Branca)
+                    {
+                        posP = new Posicao(destino.Linha + 1, destino.Coluna);
+                    }
+                    else
+                    {
+                        posP = new Posicao(destino.Linha - 1, destino.Coluna);
+                    }
+                    PecaCapturada = Tab.RetirarPeca(posP);
+                    Capturadas.Add(PecaCapturada);
+                }
             }
 
             return PecaCapturada;
@@ -92,6 +113,25 @@ namespace Xadrez
                 T.DecrementarQtdeMovimentos();
                 Tab.ColocarPeca(T, origemT);
             }
+
+            // #jogadaespecial en passant
+            if(p is Peao)
+            {
+                if(origem.Coluna != destino.Coluna && pecaCapturada == VulneravelEnPassant)
+                {
+                    Peca peao = Tab.RetirarPeca(destino);
+                    Posicao posP;
+                    if(p.Cor == ECor.Branca)
+                    {
+                        posP = new Posicao(3, destino.Coluna);
+                    }
+                    else
+                    {
+                        posP = new Posicao(4, destino.Coluna);
+                    }
+                    Tab.ColocarPeca(peao, posP);
+                }
+            }
         }
 
         public void RealizaJogada(Posicao origem, Posicao destino)
@@ -120,7 +160,19 @@ namespace Xadrez
             {
                 Turno++;
                 MudaJogador();
-            } 
+            }
+
+            Peca p = Tab.peca(destino);
+
+            //#jogadaespecial EnPassant
+            if (p is Peao && (destino.Linha == origem.Linha - 2 || destino.Linha == origem.Linha + 2))
+            {
+                VulneravelEnPassant = p;
+            }
+            else
+            {
+                VulneravelEnPassant = null;
+            }
         }
 
         public void ValidarPosicaoOrigem(Posicao pos)
